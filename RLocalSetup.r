@@ -19,6 +19,8 @@ try({
   
   lVer <- as.numeric(substr(l,3,5))
   rVer <- as.numeric(substr(r,3,5))
+  print(paste0("CURRENT LOCAL VERSION ",lVer))
+  print(paste0("CURRENT REMOTE VERSION ",rVer))
   if(rVer > lVer){
   	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
     write(rVer, file="RLocalSetup.R")
