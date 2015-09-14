@@ -1,4 +1,4 @@
-# 1.1
+# 1.2
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -110,7 +110,6 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   
   packrat::snapshot()
   packrat::restore()
-  packrat::off()
   
   dir.create("results")
   
@@ -125,6 +124,8 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   
   file <- system.file("extdata","references.bib",package="RAWmisc")
   file.copy(file, paste0(name,"/inst/extdata/references.bib"), overwrite=TRUE)
+  
+  packrat::off()
   
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
   write(".Rproj.user\n.Rhistory\n.RData\npackages/\nresults/",file=".gitignore")
