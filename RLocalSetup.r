@@ -1,4 +1,4 @@
-# 1.0
+# 1.1
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -80,7 +80,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   
   devtools::create_description(name,extra=list(Package=name,Depends=depends,Imports=imports))
   file.remove(paste0(name,"/NAMESPACE"))
-  write("exportPattern(\"^[^\\.]\")\nimport(data.table)",file=paste0(name,"/NAMESPACE"))
+  write("exportPattern(\"^[^\\\\.]\")\nimport(data.table)",file=paste0(name,"/NAMESPACE"))
   dir.create("packages")
   packrat::set_opts(local.repos =paste0(getwd(),"/packages"))
   
