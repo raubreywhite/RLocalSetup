@@ -1,4 +1,4 @@
-# 1.2
+# 1.3
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -9,16 +9,18 @@
 rm(list=ls())
 
 try({
-  if(!require(RCurl)){
-    install.packages("RCurl", repos="http://cran.r-project.org")
+  if(!require(httr)){
+    install.packages("httr", repos="http://cran.r-project.org")
   }
 
   l <- readChar("RLocalSetup.R", file.info("RLocalSetup.R")$size)
-  r <- RCurl::getURL("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
-
+  r <- httr::GET("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
+  r <- httr::content(r)
+  
   lVer <- as.numeric(substr(l,3,5))
   rVer <- as.numeric(substr(r,3,5))
   if(rVer > lVer){
+  	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
     write(rVer, file="RLocalSetup.R")
   }
 },TRUE)
