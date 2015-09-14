@@ -1,4 +1,4 @@
-# 1.6
+# 1.7
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -219,8 +219,7 @@ h <- function(topic, stage = "render", type = getOption("help_type")) {
   pkg <- basename(names(path)[1])
   path <- normalizePath(path, winslash = "/")
     devtools:::view_rd(path, pkg, stage = stage, type = type)
-  }
-
 }
+
 
 
