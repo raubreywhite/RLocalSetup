@@ -1,0 +1,16 @@
+tempDir()
+temp.dir(*)
+temp.dir)()
+temp.file()
+tempfile()
+tempdir()
+tempdir()
+z <- download.file("https://github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
+z <- download.file("http://github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
+z <- download.file("http://raw.github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
+z <- download.file("http://raw.github.com/raubreywhite/RLocalSetup/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
+if(!require(rio)){#
+  install.packages(rio)#
+}
+install.packages("rio")
+install.packages("rio")

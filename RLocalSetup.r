@@ -8,12 +8,27 @@
 
 rm(list=ls())
 
+try({
+  if(!require(RCurl)){
+    install.packages("RCurl", repos="http://cran.r-project.org")
+  }
+
+  l <- readChar("RLocalSetup.R", file.info("RLocalSetup.R")$size)
+  r <- RCurl::getURL("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
+
+  lVer <- as.numeric(substr(l,3,5))
+  rVer <- as.numeric(substr(r,3,5))
+  if(rVer > lVer){
+    write(rVer, file="RLocalSetup.R")
+  }
+},TRUE)
+
 if(!require(packrat)){
-  install.packages("packrat")
+  install.packages("packrat", repos="http://cran.r-project.org")
 } else packrat::off()
 
 if(!require(devtools)){
-  install.packages(devtools)
+  install.packages("devtools", repos="http://cran.r-project.org")
 }
 
 AddRtools <- function(path="H:/Apps/Rtools"){
