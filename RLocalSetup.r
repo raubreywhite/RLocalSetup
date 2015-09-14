@@ -1,4 +1,4 @@
-# 1.5
+# 1.6
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -208,7 +208,19 @@ LoadPackage <- function(name="test"){
   devtools::load_all(name)
 }
 
+# Copied from https://github.com/hadley/devtools/blob/master/R/dev-help.r
+h <- function(topic, stage = "render", type = getOption("help_type")) {
+  path <- devtools:::find_topic(topic)
+  if (is.null(path)) {
+    dev <- paste(devtools::dev_packages(), collapse = ", ")
+    stop("Could not find topic ", topic, " in: ", dev)
+  }
 
+  pkg <- basename(names(path)[1])
+  path <- normalizePath(path, winslash = "/")
+    devtools:::view_rd(path, pkg, stage = stage, type = type)
+  }
 
+}
 
 
