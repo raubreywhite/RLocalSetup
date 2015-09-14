@@ -1,4 +1,4 @@
-# 1.4
+# 1.5
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -23,7 +23,7 @@ try({
   print(paste0("CURRENT REMOTE VERSION ",rVer))
   if(rVer > lVer){
   	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
-    write(rVer, file="RLocalSetup.R")
+    write(r, file="RLocalSetup.R")
   }
 },TRUE)
 
