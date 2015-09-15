@@ -1,4 +1,4 @@
-# 1.7
+# 1.8
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -204,7 +204,7 @@ LoadPackage <- function(name="test"){
     git2r::commit(r, paste0("Committing while loading at ",Sys.time()))
   },TRUE)
   
-  devtools::document(name)
+  #devtools::document(name)
   devtools::load_all(name)
 }
 
