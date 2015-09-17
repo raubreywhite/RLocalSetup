@@ -1,4 +1,4 @@
-# 2.0
+# 2.1
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -51,7 +51,8 @@ AddRtools <- function(path="H:/Apps/Rtools"){
 
 if(file.exists("xlocalRTools.txt")){
   l <- readChar("xlocalRTools.txt", file.info("xlocalRTools.txt")$size)
-  l <- gsub("\n","",l)
+  l <- gsub("\r\n$","",l)
+  l <- gsub("\n$","",l)
 } else {
   l <- "H:/Apps/Rtools"
   write(l,file="xlocalRTools.txt")
@@ -66,7 +67,8 @@ if(AddRtools(l)){
 # Adding pandoc
 if(file.exists("xlocalRStudio.txt")){
   l <- readChar("xlocalRStudio.txt", file.info("xlocalRStudio.txt")$size)
-  l <- gsub("\n","",l)
+  l <- gsub("\r\n$","",l)
+  l <- gsub("\n$","",l)
 } else {
   l <- "C:/Program Files/RStudio/bin/pandoc"
   write(l,file="xlocalRStudio.txt")
