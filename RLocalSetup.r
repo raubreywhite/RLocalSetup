@@ -1,4 +1,4 @@
-# 1.8
+# 2.0
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -24,6 +24,7 @@ try({
   if(rVer > lVer){
   	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
     write(r, file="RLocalSetup.R")
+    stop("UPGRADE COMPLETED. RUN AGAIN.")
   }
 },TRUE)
 
@@ -35,6 +36,7 @@ if(!require(devtools)){
   install.packages("devtools", repos="http://cran.r-project.org")
 }
 
+# Adding R tools
 AddRtools <- function(path="H:/Apps/Rtools"){
   if(path!="" & !devtools::find_rtools()){
     path <- gsub("/","\\\\",path)
@@ -47,14 +49,32 @@ AddRtools <- function(path="H:/Apps/Rtools"){
   return(devtools::find_rtools())
 }
 
-if(AddRtools()){
-  print("RTOOLS WORKING PROPERLY")
+if(file.exists("xlocalRTools.txt")){
+  l <- readChar("xlocalRTools.txt", file.info("xlocalRTools.txt")$size)
+  l <- gsub("\n","",l)
 } else {
-  print("ERROR, R TOOLS NOT INSTALLED INTO H:/Apps/Rtools")
+  l <- "H:/Apps/Rtools"
+  write(l,file="xlocalRTools.txt")
 }
 
+if(AddRtools(l)){
+  print("RTOOLS WORKING PROPERLY")
+} else {
+  stop("ERROR, R TOOLS NOT INSTALLED INTO H:/Apps/Rtools")
+}
+
+# Adding pandoc
+if(file.exists("xlocalRStudio.txt")){
+  l <- readChar("xlocalRStudio.txt", file.info("xlocalRStudio.txt")$size)
+  l <- gsub("\n","",l)
+} else {
+  l <- "C:/Program Files/RStudio/bin/pandoc"
+  write(l,file="xlocalRStudio.txt")
+}
+Sys.setenv(RSTUDIO_PANDOC=l) 
+
 CreatePackage <- function(name="test",depends=NULL,imports=NULL){
-  depends <- unique(c(depends,c("raubreywhite/RAWmisc","raubreywhite/SMAOgraphs")))
+  depends <- unique(c(depends,c("raubreywhite/RAWmisc","raubreywhite/SMAOgraphs","gforge/Greg")))
   depends <- depends[depends!=""]
   imports <- unique(c(imports,"data.table"))
   imports <- imports[imports!=""]
