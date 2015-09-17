@@ -1,4 +1,4 @@
-# 2.1
+# 2.3
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -14,13 +14,14 @@ try({
   }
 
   l <- readChar("RLocalSetup.R", file.info("RLocalSetup.R")$size)
+  lVer <- as.numeric(substr(l,3,5))
+  print(paste0("CURRENT LOCAL VERSION ",lVer))
+  
   r <- httr::GET("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
   r <- httr::content(r)
-  
-  lVer <- as.numeric(substr(l,3,5))
   rVer <- as.numeric(substr(r,3,5))
-  print(paste0("CURRENT LOCAL VERSION ",lVer))
   print(paste0("CURRENT REMOTE VERSION ",rVer))
+  
   if(rVer > lVer){
   	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
     write(r, file="RLocalSetup.R")
@@ -28,11 +29,11 @@ try({
   }
 },TRUE)
 
-if(!require(packrat)){
+if(!suppressWarnings(suppressMessages(require(packrat)))){
   install.packages("packrat", repos="http://cran.r-project.org")
 } else packrat::off()
 
-if(!require(devtools)){
+if(!suppressWarnings(suppressMessages(require(devtools)))){
   install.packages("devtools", repos="http://cran.r-project.org")
 }
 
