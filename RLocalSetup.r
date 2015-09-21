@@ -1,4 +1,4 @@
-# 2.6
+# 2.7
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -75,18 +75,23 @@ if(!devtools::find_rtools()){
 print("RTOOLS WORKING PROPERLY")
 
 PandocInstalled <- function(){
-  pandoc.installed <- system('pandoc -v', show.output.on.console = FALSE)==0
+  sink(tempfile())
+  pandoc.installed <- system('pandoc -v')==0
+  sink()
   if(pandoc.installed) return(TRUE)
   
   rstudio.environment.installed <- Sys.getenv("RSTUDIO_PANDOC")
   if(rstudio.environment.installed!=""){
     rstudio.environment.installed <- paste0('"',rstudio.environment.installed,'" -v')
-    rstudio.environment.installed <- system(rstudio.environment.installed, show.output.on.console = FALSE)==0
-    rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v', show.output.on.console = FALSE)==0
+    sink(tempfile())
+    rstudio.environment.installed <- system(rstudio.environment.installed)==0
+    sink()
   } else rstudio.environment.installed <- FALSE
   if(rstudio.environment.installed) return(TRUE)
   
-  rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v', show.output.on.console = FALSE)==0
+  sink(tempfile())
+  rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v')==0
+  sink()
   if(rstudio.pandoc.installed){
     Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc") 
   }
