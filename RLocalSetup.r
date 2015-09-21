@@ -1,4 +1,4 @@
-# 2.4
+# 2.6
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -8,6 +8,7 @@
 
 rm(list=ls())
 
+stopUpgrade <- FALSE
 try({
   if(!require(httr)){
     install.packages("httr", repos="http://cran.r-project.org")
@@ -25,9 +26,13 @@ try({
   if(rVer > lVer){
   	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
     write(r, file="RLocalSetup.R")
-    stop("UPGRADE COMPLETED. RUN AGAIN.")
+    stopUpgrade <- TRUE
   }
 },TRUE)
+
+if(stopUpgrade){
+  stop("UPGRADE COMPLETED. RUN AGAIN.")
+}
 
 if(!suppressWarnings(suppressMessages(require(packrat)))){
   install.packages("packrat", repos="http://cran.r-project.org")
@@ -76,7 +81,7 @@ PandocInstalled <- function(){
   rstudio.environment.installed <- Sys.getenv("RSTUDIO_PANDOC")
   if(rstudio.environment.installed!=""){
     rstudio.environment.installed <- paste0('"',rstudio.environment.installed,'" -v')
-    rstudio.environment.installed <- system(rstudio.environment.installed)==0
+    rstudio.environment.installed <- system(rstudio.environment.installed, show.output.on.console = FALSE)==0
     rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v', show.output.on.console = FALSE)==0
   } else rstudio.environment.installed <- FALSE
   if(rstudio.environment.installed) return(TRUE)
@@ -107,6 +112,7 @@ if(!PandocInstalled()){
     stop("ERROR; PANDOC NOT INSTALLED") 
   }
 }
+print("PANDOC WORKING PROPERLY")
 
 CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   depends <- unique(c(depends,c("raubreywhite/RAWmisc","raubreywhite/SMAOgraphs","gforge/Greg")))
