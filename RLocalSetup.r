@@ -1,4 +1,4 @@
-# 2.3
+# 2.4
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -50,31 +50,63 @@ AddRtools <- function(path="H:/Apps/Rtools"){
   return(devtools::find_rtools())
 }
 
-if(file.exists("xlocalRTools.txt")){
-  l <- readChar("xlocalRTools.txt", file.info("xlocalRTools.txt")$size)
-  l <- gsub("\r\n$","",l)
-  l <- gsub("\n$","",l)
-} else {
-  l <- "H:/Apps/Rtools"
-  write(l,file="xlocalRTools.txt")
+print("CHECKING SYSTEM VARIABLES FOR RTOOLS LOCATION")
+if(!devtools::find_rtools()){
+  print("CHECKING TEXT FILE FOR RTOOLS LOCATION")
+  if(file.exists("xlocalRTools.txt")){
+    l <- readChar("xlocalRTools.txt", file.info("xlocalRTools.txt")$size)
+    l <- gsub("\r\n$","",l)
+    l <- gsub("\n$","",l)
+  } else {
+    l <- "H:/Apps/Rtools"
+    write(l,file="xlocalRTools.txt")
+  }
+  
+  if(!AddRtools(l)){
+    stop("ERROR, R TOOLS NOT INSTALLED INTO H:/Apps/Rtools")
+  }
+  print("RTOOLS TAKEN FROM .TXT FILE")
+}
+print("RTOOLS WORKING PROPERLY")
+
+PandocInstalled <- function(){
+  pandoc.installed <- system('pandoc -v', show.output.on.console = FALSE)==0
+  if(pandoc.installed) return(TRUE)
+  
+  rstudio.environment.installed <- Sys.getenv("RSTUDIO_PANDOC")
+  if(rstudio.environment.installed!=""){
+    rstudio.environment.installed <- paste0('"',rstudio.environment.installed,'" -v')
+    rstudio.environment.installed <- system(rstudio.environment.installed)==0
+    rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v', show.output.on.console = FALSE)==0
+  } else rstudio.environment.installed <- FALSE
+  if(rstudio.environment.installed) return(TRUE)
+  
+  rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v', show.output.on.console = FALSE)==0
+  if(rstudio.pandoc.installed){
+    Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc") 
+  }
+  if(rstudio.pandoc.installed) return(TRUE)
+  
+  return(FALSE)
 }
 
-if(AddRtools(l)){
-  print("RTOOLS WORKING PROPERLY")
-} else {
-  stop("ERROR, R TOOLS NOT INSTALLED INTO H:/Apps/Rtools")
+print("CHECKING SYSTEM VARIABLES FOR PANDOC LOCATION")
+if(!PandocInstalled()){
+  print("CHECKING TEXT FILE FOR PANDOC LOCATION")
+  # Adding pandoc
+  if(file.exists("xlocalRStudio.txt")){
+    l <- readChar("xlocalRStudio.txt", file.info("xlocalRStudio.txt")$size)
+    l <- gsub("\r\n$","",l)
+    l <- gsub("\n$","",l)
+  } else {
+    l <- "C:/Program Files/RStudio/bin/pandoc"
+    write(l,file="xlocalRStudio.txt")
+  }
+  Sys.setenv(RSTUDIO_PANDOC=l) 
+  if(!PandocInstalled()){
+    stop("ERROR; PANDOC NOT INSTALLED") 
+  }
 }
-
-# Adding pandoc
-if(file.exists("xlocalRStudio.txt")){
-  l <- readChar("xlocalRStudio.txt", file.info("xlocalRStudio.txt")$size)
-  l <- gsub("\r\n$","",l)
-  l <- gsub("\n$","",l)
-} else {
-  l <- "C:/Program Files/RStudio/bin/pandoc"
-  write(l,file="xlocalRStudio.txt")
-}
-Sys.setenv(RSTUDIO_PANDOC=l) 
 
 CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   depends <- unique(c(depends,c("raubreywhite/RAWmisc","raubreywhite/SMAOgraphs","gforge/Greg")))
