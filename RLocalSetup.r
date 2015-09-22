@@ -1,4 +1,4 @@
-# 2.9
+# 3.0
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -241,6 +241,7 @@ RmdToHTML(file,paste0(\"results/Report_\",format(Sys.time(), \"%Y_%m_%d\"),\".ht
   },TRUE)
   if(!repoExists){
     r <- git2r::init(".")
+    git2r::config(r, user.name="RLocalSetup", user.email="test@gmail.com")
     message("* Adding files and committing")
     paths <- unlist(git2r::status(r, verbose = FALSE))
     git2r::add(r, paths)
@@ -263,7 +264,7 @@ LoadPackage <- function(name="test"){
   }
   
   try({
-    r <- git2r::repository(".")
+    #r <- git2r::repository(".")
     r <- git2r::repository()
     git2r::config(r, user.name="RLocalSetup", user.email="test@gmail.com")
     paths <- unlist(git2r::status(r,verbose = FALSE))
