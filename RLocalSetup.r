@@ -1,4 +1,4 @@
-# 2.7
+# 2.8
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -120,7 +120,7 @@ if(!PandocInstalled()){
 print("PANDOC WORKING PROPERLY")
 
 CreatePackage <- function(name="test",depends=NULL,imports=NULL){
-  depends <- unique(c(depends,c("raubreywhite/RAWmisc","raubreywhite/SMAOgraphs","gforge/Greg")))
+  depends <- unique(c(depends,c("raubreywhite/RAWmisc","raubreywhite/SMAOgraphs")))
   depends <- depends[depends!=""]
   imports <- unique(c(imports,"data.table"))
   imports <- imports[imports!=""]
