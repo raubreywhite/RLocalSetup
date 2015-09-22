@@ -82,7 +82,7 @@ PandocInstalled <- function(){
   
   rstudio.environment.installed <- Sys.getenv("RSTUDIO_PANDOC")
   if(rstudio.environment.installed!=""){
-    rstudio.environment.installed <- paste0('"',rstudio.environment.installed,'" -v')
+    rstudio.environment.installed <- paste0('"',rstudio.environment.installed,'/pandoc" -v')
     sink(tempfile())
     rstudio.environment.installed <- system(rstudio.environment.installed)==0
     sink()
@@ -265,6 +265,7 @@ LoadPackage <- function(name="test"){
   try({
     r <- git2r::repository(".")
     r <- git2r::repository()
+    git2r::config(r, user.name="RLocalSetup", user.email="test@gmail.com")
     paths <- unlist(git2r::status(r,verbose = FALSE))
     git2r::add(r, paths)
     git2r::commit(r, paste0("Committing while loading at ",Sys.time()))

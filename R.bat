@@ -24,7 +24,7 @@
 :: License: GPL 2.0
 set GIT_HOME=H:\Apps\Git\bin
 set RSTUDIO=H:\Apps\RStudio\bin\rstudio.exe
-set RSTUDIO_PANDOC=H:\Apps\RStudio\bin\pandoc\pandoc
+set RSTUDIO_PANDOC=H:\Apps\RStudio\bin\pandoc
 set R_HOME=H:\Apps\R\R-3.2.2
 set R_TOOLS=H:\Apps\Rtools\
 
