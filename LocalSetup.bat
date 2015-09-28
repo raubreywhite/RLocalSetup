@@ -86,7 +86,4 @@ set R_MIKTEX_PATH=C:\Program Files (x86)\MiKTeX 2.9\miktex\bin
 path %R_TOOLS_PATH%;%R_MIKTEX_PATH%;%PATH%;%R_PATH%;%GIT_HOME%
 
 set RSTUDIO_WHICH_R=%R_HOME%
-:: if there are no arguments we are done; else run the argument
-%RSTUDIO%
-if "%1"=="" goto:eof
-%*
+

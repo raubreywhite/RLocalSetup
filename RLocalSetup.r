@@ -1,4 +1,4 @@
-# 3.0
+# 3.1
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -8,30 +8,28 @@
 
 rm(list=ls())
 
-stopUpgrade <- FALSE
-try({
-  if(!require(httr)){
-    install.packages("httr", repos="http://cran.r-project.org")
-  }
-
-  l <- readChar("RLocalSetup.R", file.info("RLocalSetup.R")$size)
-  lVer <- as.numeric(substr(l,3,5))
-  print(paste0("CURRENT LOCAL VERSION ",lVer))
+if(!exists(upgradeRLocalSetup)) upgradeRLocalSetup <- FALSE
+if(upgradeRLocalSetup){
+  try({
+    if(!require(httr)){
+      install.packages("httr", repos="http://cran.r-project.org")
+    }
   
-  r <- httr::GET("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
-  r <- httr::content(r)
-  rVer <- as.numeric(substr(r,3,5))
-  print(paste0("CURRENT REMOTE VERSION ",rVer))
-  
-  if(rVer > lVer){
-  	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
-    write(r, file="RLocalSetup.R")
-    stopUpgrade <- TRUE
-  }
-},TRUE)
-
-if(stopUpgrade){
-  stop("UPGRADE COMPLETED. RUN AGAIN.")
+    l <- readChar("RLocalSetup.R", file.info("RLocalSetup.R")$size)
+    lVer <- as.numeric(substr(l,3,5))
+    print(paste0("CURRENT LOCAL VERSION ",lVer))
+    
+    r <- httr::GET("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
+    r <- httr::content(r)
+    rVer <- as.numeric(substr(r,3,5))
+    print(paste0("CURRENT REMOTE VERSION ",rVer))
+    
+    if(rVer > lVer){
+    	print(paste0("UPGRADING FROM ",lVer," to ",rVer))
+      write(r, file="RLocalSetup.R")
+      stopUpgrade <- TRUE
+    }
+  },TRUE)
 }
 
 if(!suppressWarnings(suppressMessages(require(packrat)))){
@@ -57,41 +55,22 @@ AddRtools <- function(path="H:/Apps/Rtools"){
 
 print("CHECKING SYSTEM VARIABLES FOR RTOOLS LOCATION")
 if(!devtools::find_rtools()){
-  print("CHECKING TEXT FILE FOR RTOOLS LOCATION")
-  if(file.exists("xlocalRTools.txt")){
-    l <- readChar("xlocalRTools.txt", file.info("xlocalRTools.txt")$size)
-    l <- gsub("\r\n$","",l)
-    l <- gsub("\n$","",l)
-  } else {
-    l <- "H:/Apps/Rtools"
-    write(l,file="xlocalRTools.txt")
-  }
-  
-  if(!AddRtools(l)){
-    stop("ERROR, R TOOLS NOT INSTALLED INTO H:/Apps/Rtools")
-  }
-  print("RTOOLS TAKEN FROM .TXT FILE")
+    stop("ERROR, R TOOLS NOT FOUND IN SYSTEM VARIABLES")
 }
 print("RTOOLS WORKING PROPERLY")
 
 PandocInstalled <- function(){
-  sink(tempfile())
   pandoc.installed <- system('pandoc -v')==0
-  sink()
   if(pandoc.installed) return(TRUE)
   
   rstudio.environment.installed <- Sys.getenv("RSTUDIO_PANDOC")
   if(rstudio.environment.installed!=""){
     rstudio.environment.installed <- paste0('"',rstudio.environment.installed,'/pandoc" -v')
-    sink(tempfile())
     rstudio.environment.installed <- system(rstudio.environment.installed)==0
-    sink()
   } else rstudio.environment.installed <- FALSE
   if(rstudio.environment.installed) return(TRUE)
-  
-  sink(tempfile())
+
   rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v')==0
-  sink()
   if(rstudio.pandoc.installed){
     Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc") 
   }
@@ -102,20 +81,7 @@ PandocInstalled <- function(){
 
 print("CHECKING SYSTEM VARIABLES FOR PANDOC LOCATION")
 if(!PandocInstalled()){
-  print("CHECKING TEXT FILE FOR PANDOC LOCATION")
-  # Adding pandoc
-  if(file.exists("xlocalRStudio.txt")){
-    l <- readChar("xlocalRStudio.txt", file.info("xlocalRStudio.txt")$size)
-    l <- gsub("\r\n$","",l)
-    l <- gsub("\n$","",l)
-  } else {
-    l <- "C:/Program Files/RStudio/bin/pandoc"
-    write(l,file="xlocalRStudio.txt")
-  }
-  Sys.setenv(RSTUDIO_PANDOC=l) 
-  if(!PandocInstalled()){
     stop("ERROR; PANDOC NOT INSTALLED") 
-  }
 }
 print("PANDOC WORKING PROPERLY")
 
@@ -221,6 +187,8 @@ FigureTest <- function(data){
 paste0("
 setwd(\"",getwd(),"\")
 
+# Change if you want local setup to be pulled from github
+upgradeRLocalSetup <- FALSE
 source(\"RLocalSetup.R\")
 
 LoadPackage(\"",name,"\")
@@ -232,7 +200,7 @@ FigureTest(data)
 file <- system.file(\"extdata\",\"report.Rmd\",package=\"",name,"\")
 RmdToHTML(file,paste0(\"results/Report_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
        
-"),file="run.R")
+"),file="Run.R")
 
   repoExists <- FALSE
   try({
@@ -275,19 +243,5 @@ LoadPackage <- function(name="test"){
   #devtools::document(name)
   devtools::load_all(name)
 }
-
-# Copied from https://github.com/hadley/devtools/blob/master/R/dev-help.r
-h <- function(topic, stage = "render", type = getOption("help_type")) {
-  path <- devtools:::find_topic(topic)
-  if (is.null(path)) {
-    dev <- paste(devtools::dev_packages(), collapse = ", ")
-    stop("Could not find topic ", topic, " in: ", dev)
-  }
-
-  pkg <- basename(names(path)[1])
-  path <- normalizePath(path, winslash = "/")
-    devtools:::view_rd(path, pkg, stage = stage, type = type)
-}
-
 
 

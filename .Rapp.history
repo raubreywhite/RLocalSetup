@@ -1,52 +1,0 @@
-tempDir()
-temp.dir(*)
-temp.dir)()
-temp.file()
-tempfile()
-tempdir()
-z <- download.file("https://github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
-z <- download.file("http://github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
-z <- download.file("http://raw.github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
-z <- download.file("http://raw.github.com/raubreywhite/RLocalSetup/master/RLocalSetup.r", destfile=paste0(tempdir(),"RLocalSetup.R"))
-if(!require(rio)){#
-  install.packages(rio)#
-}
-install.packages("rio")
-# 1.0#
-##
-# Richard White#
-# r.aubrey.white@gmail.com#
-# github.com/raubreywhite/RLocalSetup#
-##
-# Local setup of skeleton R analysis work#
-rm(list=ls())#
-#
-if(!require(rio)){#
-  install.packages("rio")#
-}
-rio::import("https://github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r")
-rio::import
-rio::import("https://github.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
-? curl_download
-z <- RCurl::getURL("https://github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r"))
-z <- RCurl::getURL("https://github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r")
-z
-z <- RCurl::getURL("https://raw.github.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
-z
-z <- RCurl::getURL("https://raw.github.com/raubreywhite/RLocalSetup/blob/master/RLocalSetup.r")
-z
-z <- RCurl::getURL("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
-z
-read("RLocalSetup.R")
-?write
-scan("RLocalSetup.R")
-l <- readChar("RLocalSetup.R", file.info("RLocalSetup.R")$size)#
-r <- RCurl::getURL("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")
-l
-r
-l <- readChar("RLocalSetup.R", file.info("RLocalSetup.R")$size)#
-r <- RCurl::getURL("https://raw.githubusercontent.com/raubreywhite/RLocalSetup/master/RLocalSetup.r")#
-lVer <- as.numeric(substr(l,3,5))#
-rVer <- as.numeric(substr(r,3,5))
-lVer
-rVer
