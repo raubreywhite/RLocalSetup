@@ -198,7 +198,16 @@ data <- CleanData()
 FigureTest(data)
 
 file <- system.file(\"extdata\",\"report.Rmd\",package=\"",name,"\")
-RmdToHTML(file,paste0(\"results/Report_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
+
+# Self contained HTML file
+# - Copying base64 images to word/docx won't work
+# - But you can email this to people and it will still work
+RmdToHTML(file,paste0(\"results/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
+
+# Non-self contained HTML file
+# - Copying/pasting this to word/dockx will work
+# - But you can't email this to people and have the images still work
+RmdToDOCX(file,paste0(\"results/DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
        
 "),file="Run.R")
 
