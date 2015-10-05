@@ -1,4 +1,4 @@
-# 3.1
+# 3.2
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -187,6 +187,9 @@ FigureTest <- function(data){
 paste0("
 setwd(\"",getwd(),"\")
 
+# Do a 'major' commit to Git
+# CommitToGit(\"This is a big commit\")
+
 # Change if you want local setup to be pulled from github
 upgradeRLocalSetup <- FALSE
 source(\"RLocalSetup.R\")
@@ -218,7 +221,7 @@ RmdToDOCX(file,paste0(\"results/DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\
   },TRUE)
   if(!repoExists){
     r <- git2r::init(".")
-    git2r::config(r, user.name="RLocalSetup", user.email="test@gmail.com")
+    git2r::config(r, user.name=Sys.info()[["user"]], user.email="test@gmail.com")
     message("* Adding files and committing")
     paths <- unlist(git2r::status(r, verbose = FALSE))
     git2r::add(r, paths)
@@ -243,7 +246,7 @@ LoadPackage <- function(name="test"){
   try({
     #r <- git2r::repository(".")
     r <- git2r::repository()
-    git2r::config(r, user.name="RLocalSetup", user.email="test@gmail.com")
+    git2r::config(r, user.name=Sys.info()[["user"]], user.email="test@gmail.com")
     paths <- unlist(git2r::status(r,verbose = FALSE))
     git2r::add(r, paths)
     git2r::commit(r, paste0("Committing while loading at ",Sys.time()))
@@ -251,6 +254,17 @@ LoadPackage <- function(name="test"){
   
   #devtools::document(name)
   devtools::load_all(name)
+}
+
+CommitToGit <- function(message="This is a working version"){
+  try({
+    #r <- git2r::repository(".")
+    r <- git2r::repository()
+    git2r::config(r, user.name=Sys.info()[["user"]], user.email="test@gmail.com")
+    paths <- unlist(git2r::status(r,verbose = FALSE))
+    git2r::add(r, paths)
+    git2r::commit(r, message)
+  },TRUE)
 }
 
 
