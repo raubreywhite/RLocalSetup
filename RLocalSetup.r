@@ -244,7 +244,8 @@ LoadPackage <- function(name="test"){
   try({
     #r <- git2r::repository(".")
     r <- git2r::repository()
-    git2r::config(r, user.name=Sys.info()[["user"]], user.email="test@gmail.com")
+    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="test@gmail.com")')
+    eval(parse(text=text))
     paths <- unlist(git2r::status(r,verbose = FALSE))
     git2r::add(r, paths)
     git2r::commit(r, paste0("Committing while loading at ",Sys.time()))
@@ -258,7 +259,8 @@ CommitToGit <- function(message="This is a working version"){
   try({
     #r <- git2r::repository(".")
     r <- git2r::repository()
-    git2r::config(r, user.name=Sys.info()[["user"]], user.email="test@gmail.com")
+    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="test@gmail.com")')
+    eval(parse(text=text))
     paths <- unlist(git2r::status(r,verbose = FALSE))
     git2r::add(r, paths)
     git2r::commit(r, message)
