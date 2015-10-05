@@ -185,12 +185,12 @@ FigureTest <- function(data){
 paste0("
 setwd(\"",getwd(),"\")
 
-# Do a 'major' commit to Git
-# CommitToGit(\"This is a big commit\")
-
 # Change if you want local setup to be pulled from github
 upgradeRLocalSetup <- FALSE
 source(\"RLocalSetup.R\")
+
+# Do a 'major' commit to Git
+# CommitToGit(\"This is a big commit\")
 
 LoadPackage(\"",name,"\")
 Libraries()
