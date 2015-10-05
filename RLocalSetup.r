@@ -6,8 +6,6 @@
 #
 # Local setup of skeleton R analysis work
 
-rm(list=ls())
-
 if(!exists("upgradeRLocalSetup")) upgradeRLocalSetup <- FALSE
 if(upgradeRLocalSetup){
   try({
