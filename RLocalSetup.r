@@ -1,4 +1,4 @@
-# 3.2
+# 3.3
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -219,7 +219,8 @@ RmdToDOCX(file,paste0(\"results/DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\
   },TRUE)
   if(!repoExists){
     r <- git2r::init(".")
-    git2r::config(r, user.name=Sys.info()[["user"]], user.email="test@gmail.com")
+    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="test@gmail.com")')
+    eval(parse(text=text))
     message("* Adding files and committing")
     paths <- unlist(git2r::status(r, verbose = FALSE))
     git2r::add(r, paths)
