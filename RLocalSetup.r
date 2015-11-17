@@ -1,4 +1,4 @@
-# 3.3
+# 3.4
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -195,6 +195,10 @@ source(\"RLocalSetup.R\")
 LoadPackage(\"",name,"\")
 Libraries()
 
+r <- git2r::repository()
+git2r::summary(r)
+git2r::contributions(r,by=\"author\")
+
 data <- CleanData()
 FigureTest(data)
 
@@ -219,7 +223,7 @@ RmdToDOCX(file,paste0(\"results/DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\
   },TRUE)
   if(!repoExists){
     r <- git2r::init(".")
-    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="test@gmail.com")')
+    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="',Sys.info()[["user"]],'@fhi.no")')
     eval(parse(text=text))
     message("* Adding files and committing")
     paths <- unlist(git2r::status(r, verbose = FALSE))
@@ -245,7 +249,7 @@ LoadPackage <- function(name="test"){
   try({
     #r <- git2r::repository(".")
     r <- git2r::repository()
-    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="test@gmail.com")')
+    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="',Sys.info()[["user"]],'@fhi.no")')
     eval(parse(text=text))
     paths <- unlist(git2r::status(r,verbose = FALSE))
     git2r::add(r, paths)
@@ -260,7 +264,7 @@ CommitToGit <- function(message="This is a working version"){
   try({
     #r <- git2r::repository(".")
     r <- git2r::repository()
-    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="test@gmail.com")')
+    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="',Sys.info()[["user"]],'@fhi.no")')
     eval(parse(text=text))
     paths <- unlist(git2r::status(r,verbose = FALSE))
     git2r::add(r, paths)
