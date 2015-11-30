@@ -1,4 +1,4 @@
-# 3.4
+# 3.5
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -30,13 +30,7 @@ if(upgradeRLocalSetup){
   },TRUE)
 }
 
-if(!suppressWarnings(suppressMessages(require(packrat)))){
-  install.packages("packrat", repos="http://cran.r-project.org")
-} else packrat::off()
 
-if(!suppressWarnings(suppressMessages(require(devtools)))){
-  install.packages("devtools", repos="http://cran.r-project.org")
-}
 
 # Adding R tools
 AddRtools <- function(path="H:/Apps/Rtools"){
@@ -51,11 +45,6 @@ AddRtools <- function(path="H:/Apps/Rtools"){
   return(devtools::find_rtools())
 }
 
-print("CHECKING SYSTEM VARIABLES FOR RTOOLS LOCATION")
-if(!devtools::find_rtools()){
-    stop("ERROR, R TOOLS NOT FOUND IN SYSTEM VARIABLES")
-}
-print("RTOOLS WORKING PROPERLY")
 
 PandocInstalled <- function(){
   pandoc.installed <- system('pandoc -v')==0
@@ -84,6 +73,20 @@ if(!PandocInstalled()){
 print("PANDOC WORKING PROPERLY")
 
 CreatePackage <- function(name="test",depends=NULL,imports=NULL){
+  if(!suppressWarnings(suppressMessages(require(devtools)))){
+    install.packages("devtools", repos="http://cran.r-project.org")
+  }
+  
+  if(!suppressWarnings(suppressMessages(require(packrat)))){
+    install.packages("packrat", repos="http://cran.r-project.org")
+  } else packrat::off()
+  
+  print("CHECKING SYSTEM VARIABLES FOR RTOOLS LOCATION")
+  if(!devtools::find_rtools()){
+    stop("ERROR, R TOOLS NOT FOUND IN SYSTEM VARIABLES")
+  }
+  print("RTOOLS WORKING PROPERLY")
+  
   depends <- unique(c(depends,c("raubreywhite/RAWmisc","raubreywhite/SMAOgraphs")))
   depends <- depends[depends!=""]
   imports <- unique(c(imports,"data.table"))
@@ -233,7 +236,18 @@ RmdToDOCX(file,paste0(\"results/DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\
 }
 
 LoadPackage <- function(name="test"){
+  if(!suppressWarnings(suppressMessages(require(packrat)))){
+    install.packages("packrat", repos="http://cran.r-project.org")
+  } else packrat::off()
+  
   packrat::on(name)
+  
+  print("CHECKING SYSTEM VARIABLES FOR RTOOLS LOCATION")
+  if(!devtools::find_rtools()){
+    stop("ERROR, R TOOLS NOT FOUND IN SYSTEM VARIABLES")
+  }
+  print("RTOOLS WORKING PROPERLY")
+  
   
   packrat::set_opts(local.repos =paste0(getwd(),"/packages"))
   stat <- packrat::status()
