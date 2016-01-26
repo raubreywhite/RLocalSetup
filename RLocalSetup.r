@@ -1,4 +1,4 @@
-# 3.6
+# 3.7
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -153,6 +153,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   dir.create("data_clean")
 
   dir.create("results_temp")
+  dir.create("results_final")
   dir.create("reports")
 
   dir.create(paste0(name,"/inst"))
@@ -173,7 +174,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   packrat::off()
 
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
-  write(".Rproj.user\n.Rhistory\n.RData\npackages/\nresults_temp/\ndata_temp/\ndata_clean/",file=".gitignore")
+  write(".Rproj.user\n.Rhistory\n.RData\npackages/\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/",file=".gitignore")
   write(".Rproj.user\n.Rhistory\n.RData\npackrat/",file=paste0(name,"/.gitignore"))
 
   write("
@@ -187,7 +188,7 @@ FigureTest <- function(data){
   q <- ggplot(data, aes(x=x, y=y))
   q <- q + geom_point()
   q <- SMAOgraphs::SMAOFormatGGPlot(q)
-  SMAOgraphs::SMAOpng(\"results/test.png\")
+  SMAOgraphs::SMAOpng(\"results_final/test.png\")
   print(q)
   dev.off()
 }",file=paste0(name,"/R/Figures.R"))
@@ -214,20 +215,15 @@ data <- CleanData()
 FigureTest(data)
 
 
-
 # Self contained HTML file
 # - Copying base64 images to word/docx won't work
 # - But you can email this to people and it will still work
-setwd(\"reports\")
-RmdToHTML(\"report.Rmd\",paste0(\"HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
-setwd(\"..\")
+RmdToHTML(\"reports/report.Rmd\",paste0(\"reports/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFromReports=TRUE)
 
 # Non-self contained HTML file
 # - Copying/pasting this to word/dockx will work
 # - But you can't email this to people and have the images still work
-setwd(\"reports\")
-RmdToDOCX(\"report.Rmd\",paste0(\"DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
-setwd(\"..\")
+# RmdToDOCX(\"report.Rmd\",paste0(\"DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
 
 "),file="Run.R")
 
