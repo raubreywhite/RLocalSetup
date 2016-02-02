@@ -1,4 +1,4 @@
-# 3.7
+# 3.8
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -118,9 +118,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   devtools::create_description(name,extra=list(Package=name,Depends=depends,Imports=imports))
   file.remove(paste0(name,"/NAMESPACE"))
   write("exportPattern(\"^[^\\\\.]\")\nimport(data.table)",file=paste0(name,"/NAMESPACE"))
-  dir.create("packages")
-  packrat::set_opts(local.repos =paste0(getwd(),"/packages"))
-
+ 
   if(length(dependsCRAN)>0) for(i in dependsCRAN){
     install.packages(i)
   }
@@ -174,7 +172,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   packrat::off()
 
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
-  write(".Rproj.user\n.Rhistory\n.RData\npackages/\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/",file=".gitignore")
+  write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/",file=".gitignore")
   write(".Rproj.user\n.Rhistory\n.RData\npackrat/",file=paste0(name,"/.gitignore"))
 
   write("
@@ -205,25 +203,17 @@ source(\"RLocalSetup.R\")
 # CommitToGit(\"This is a big commit\")
 
 LoadPackage(\"",name,"\")
-Libraries()
+library(data.table)
 
 r <- git2r::repository()
 git2r::summary(r)
 git2r::contributions(r,by=\"author\")
 
-data <- CleanData()
-FigureTest(data)
-
-
 # Self contained HTML file
 # - Copying base64 images to word/docx won't work
 # - But you can email this to people and it will still work
-RmdToHTML(\"reports/report.Rmd\",paste0(\"reports/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFromReports=TRUE)
+RAWmisc::RmdToHTML(\"reports/report.Rmd\",paste0(\"reports/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFromReports=TRUE)
 
-# Non-self contained HTML file
-# - Copying/pasting this to word/dockx will work
-# - But you can't email this to people and have the images still work
-# RmdToDOCX(\"report.Rmd\",paste0(\"DOCXReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"))
 
 "),file="Run.R")
 
