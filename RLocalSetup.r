@@ -213,7 +213,7 @@ git2r::contributions(r,by=\"author\")
 # Self contained HTML file
 # - Copying base64 images to word/docx won't work
 # - But you can email this to people and it will still work
-RAWmisc::RmdToHTML(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFrom="reports_skeleton")
+RAWmisc::RmdToHTML(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFrom=\"reports_skeleton\")
 
 
 "),file="Run.R")
