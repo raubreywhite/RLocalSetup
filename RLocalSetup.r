@@ -89,7 +89,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   depends <- unique(c(depends,c("ggplot2")))
   depends <- depends[depends!=""]
-  imports <- unique(c(imports,"data.table","raubreywhite/RAWmisc","raubreywhite/SMAOgraphs"))
+  imports <- unique(c(imports,"data.table","raubreywhite/RAWmisc","raubreywhite/SMAOgraphs","rstudio/revealjs"))
   imports <- imports[imports!=""]
 
   devtools::create(name)
@@ -152,27 +152,28 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   dir.create("results_temp")
   dir.create("results_final")
-  dir.create("reports")
+  dir.create("reports_skeleton")
+  dir.create("reports_formatted")
 
   dir.create(paste0(name,"/inst"))
   dir.create(paste0(name,"/inst/extdata"))
 
   file <- system.file("extdata","report.Rmd",package="RAWmisc")
   file.copy(file, paste0(name,"/inst/extdata/report.Rmd"), overwrite=TRUE)
-  file.copy(file, paste0("reports/report.Rmd"), overwrite=TRUE)
+  file.copy(file, paste0("reports_skeleton/report.Rmd"), overwrite=TRUE)
 
   file <- system.file("extdata","american-medical-association.csl",package="RAWmisc")
   file.copy(file, paste0(name,"/inst/extdata/american-medical-association.csl"), overwrite=TRUE)
-  file.copy(file, paste0("reports/american-medical-association.csl"), overwrite=TRUE)
+  file.copy(file, paste0("reports_skeleton/american-medical-association.csl"), overwrite=TRUE)
 
   file <- system.file("extdata","references.bib",package="RAWmisc")
   file.copy(file, paste0(name,"/inst/extdata/references.bib"), overwrite=TRUE)
-  file.copy(file, paste0("reports/references.bib"), overwrite=TRUE)
+  file.copy(file, paste0("reports_skeleton/references.bib"), overwrite=TRUE)
 
   packrat::off()
 
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
-  write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/",file=".gitignore")
+  write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/\nreports_formatted/",file=".gitignore")
   write(".Rproj.user\n.Rhistory\n.RData\npackrat/",file=paste0(name,"/.gitignore"))
 
   write("
@@ -212,7 +213,7 @@ git2r::contributions(r,by=\"author\")
 # Self contained HTML file
 # - Copying base64 images to word/docx won't work
 # - But you can email this to people and it will still work
-RAWmisc::RmdToHTML(\"reports/report.Rmd\",paste0(\"reports/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFromReports=TRUE)
+RAWmisc::RmdToHTML(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFrom="reports_skeleton")
 
 
 "),file="Run.R")
