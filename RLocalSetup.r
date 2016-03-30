@@ -89,7 +89,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   depends <- unique(c(depends,c("ggplot2")))
   depends <- depends[depends!=""]
-  imports <- unique(c(imports,"data.table","raubreywhite/RAWmisc","raubreywhite/SMAOgraphs","rstudio/revealjs"))
+  imports <- unique(c(imports,"data.table","raubreywhite/RAWmisc","rstudio/revealjs"))
   imports <- imports[imports!=""]
 
   devtools::create(name)
