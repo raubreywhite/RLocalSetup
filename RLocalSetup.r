@@ -1,4 +1,4 @@
-# 3.9
+# 4.0
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -248,17 +248,7 @@ LoadPackage <- function(name="test"){
   print("RTOOLS WORKING PROPERLY")
 
 
-  packrat::set_opts(local.repos =paste0(getwd(),"/packages"))
-  stat <- packrat::status()
-
-  if(sum(is.na(stat$packrat.version))>0){
-    packrat::snapshot()
-    stat <- packrat::status()
-  }
-  if(sum(stat$packrat.version!=stat$library.version,na.rm=T)>0){
-    packrat::restore()
-  }
-
+  print("TRYING TO COMIT TO GIT")
   try({
     #r <- git2r::repository(".")
     r <- git2r::repository()
@@ -267,10 +257,13 @@ LoadPackage <- function(name="test"){
     paths <- unlist(git2r::status(r,verbose = FALSE))
     git2r::add(r, paths)
     git2r::commit(r, paste0("Committing while loading at ",Sys.time()))
+    print("GIT COMMITTED")
   },TRUE)
 
   #devtools::document(name)
+  print("LOADING PACKAGE")
   devtools::load_all(name)
+  print("FINISHED")
 }
 
 CommitToGit <- function(message="This is a working version"){
