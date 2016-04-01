@@ -1,4 +1,4 @@
-# 4.0
+# 4.1
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -93,8 +93,8 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   imports <- imports[imports!=""]
 
   devtools::create(name)
-  packrat::init(name, enter=FALSE)
-  packrat::on(name)
+  packrat::init(enter=FALSE)
+  packrat::on()
 
   install.packages("devtools")
   install.packages("stringr")
@@ -123,12 +123,6 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
     install.packages(i)
   }
   if(length(dependsGithub)>0) for(i in dependsGithub){
-    #temp <- devtools:::github_remote(i)
-    #bundle <- devtools:::remote_download.github_remote(temp)
-    #src <- devtools:::source_pkg(bundle)
-    #devtools::build(src,path=paste0(getwd(),"/packages"))
-    ##devtools:::add_metadata(src, devtools:::remote_metadata.github_remote(temp, bundle, src))
-    ##file.copy(src,"packages",recursive=TRUE)
     packrat::install_github(i)
   }
 
@@ -136,10 +130,6 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
     install.packages(i)
   }
   if(length(importsGithub)>0) for(i in importsGithub){
-    #temp <- devtools:::github_remote(i)
-    #bundle <- devtools:::remote_download.github_remote(temp)
-    #src <- devtools:::source_pkg(bundle)
-    #devtools::build(src,path=paste0(getwd(),"/packages"))
     packrat::install_github(i)
   }
 
@@ -154,6 +144,8 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   dir.create("results_final")
   dir.create("reports_skeleton")
   dir.create("reports_formatted")
+  dir.create("pres_skeleton")
+  dir.create("pres_formatted")
 
   dir.create(paste0(name,"/inst"))
   dir.create(paste0(name,"/inst/extdata"))
@@ -173,8 +165,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   packrat::off()
 
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
-  write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/\nreports_formatted/",file=".gitignore")
-  write(".Rproj.user\n.Rhistory\n.RData\npackrat/",file=paste0(name,"/.gitignore"))
+  write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/\nreports_formatted/\npres_formatted/\npackrat/",file=".gitignore")
 
   write("
 CleanData <- function(){
@@ -200,15 +191,23 @@ setwd(\"",getwd(),"\")
 upgradeRLocalSetup <- FALSE
 source(\"RLocalSetup.R\")
 
-# Do a 'major' commit to Git
-# CommitToGit(\"This is a big commit\")
+# Packrat
+packrat::on()
+#packrat::status()
+#packrat::snapshot()
 
-LoadPackage(\"",name,"\")
+# Load package
+devtools::load_all(\"",name,"\")
 library(data.table)
+
+# Commit to Git
+CommitToGit(paste0(\"Committing while loading at \",Sys.time()))
 
 r <- git2r::repository()
 git2r::summary(r)
 git2r::contributions(r,by=\"author\")
+
+# Your code starts here
 
 # Self contained HTML file
 # - Copying base64 images to word/docx won't work
