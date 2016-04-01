@@ -187,7 +187,7 @@ upgradeRLocalSetup <- FALSE
 source(\"RLocalSetup.R\")
 
 # Packrat
-packrat::on()
+packrat::on(auto.snapshot=FALSE)
 #packrat::status()
 #packrat::snapshot()
 
