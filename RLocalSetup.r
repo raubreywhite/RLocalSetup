@@ -47,17 +47,17 @@ AddRtools <- function(path="H:/Apps/Rtools"){
 
 
 PandocInstalled <- function(){
-  pandoc.installed <- system('pandoc -v')==0
+  suppressWarnings(pandoc.installed <- system('pandoc -v',show.output.on.console = FALSE)==0)
   if(pandoc.installed) return(TRUE)
 
   rstudio.environment.installed <- Sys.getenv("RSTUDIO_PANDOC")
   if(rstudio.environment.installed!=""){
     rstudio.environment.installed <- paste0('"',rstudio.environment.installed,'/pandoc" -v')
-    rstudio.environment.installed <- system(rstudio.environment.installed)==0
+    suppressWarnings(rstudio.environment.installed <- system(rstudio.environment.installed,show.output.on.console = FALSE)==0)
   } else rstudio.environment.installed <- FALSE
   if(rstudio.environment.installed) return(TRUE)
 
-  rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v')==0
+  suppressWarnings(rstudio.pandoc.installed <- system('"C:/Program Files/RStudio/bin/pandoc/pandoc" -v',show.output.on.console = FALSE)==0)
   if(rstudio.pandoc.installed){
     Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc")
   }
@@ -65,12 +65,6 @@ PandocInstalled <- function(){
 
   return(FALSE)
 }
-
-print("CHECKING SYSTEM VARIABLES FOR PANDOC LOCATION")
-if(!PandocInstalled()){
-    stop("ERROR; PANDOC NOT INSTALLED")
-}
-print("PANDOC WORKING PROPERLY")
 
 CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   if(!suppressWarnings(suppressMessages(require(devtools)))){
@@ -233,38 +227,6 @@ RAWmisc::RmdToHTMLDOCX(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatte
   }
 }
 
-LoadPackage <- function(name="test"){
-  if(!suppressWarnings(suppressMessages(require(packrat)))){
-    install.packages("packrat", repos="http://cran.r-project.org")
-  } else packrat::off()
-
-  packrat::on(name)
-
-  print("CHECKING SYSTEM VARIABLES FOR RTOOLS LOCATION")
-  if(!devtools::find_rtools()){
-    stop("ERROR, R TOOLS NOT FOUND IN SYSTEM VARIABLES")
-  }
-  print("RTOOLS WORKING PROPERLY")
-
-
-  print("TRYING TO COMIT TO GIT")
-  try({
-    #r <- git2r::repository(".")
-    r <- git2r::repository()
-    text = paste0('git2r::config(r, user.name="',Sys.info()[["user"]],'", user.email="',Sys.info()[["user"]],'@fhi.no")')
-    eval(parse(text=text))
-    paths <- unlist(git2r::status(r,verbose = FALSE))
-    git2r::add(r, paths)
-    git2r::commit(r, paste0("Committing while loading at ",Sys.time()))
-    print("GIT COMMITTED")
-  },TRUE)
-
-  #devtools::document(name)
-  print("LOADING PACKAGE")
-  devtools::load_all(name)
-  print("FINISHED")
-}
-
 CommitToGit <- function(message="This is a working version"){
   try({
     #r <- git2r::repository(".")
@@ -277,4 +239,24 @@ CommitToGit <- function(message="This is a working version"){
   },TRUE)
 }
 
+# making sure everything is where it shold be
 
+if(!suppressWarnings(suppressMessages(require(packrat)))){
+  install.packages("packrat", repos="http://cran.r-project.org")
+} else packrat::off()
+
+if(!suppressWarnings(suppressMessages(require(devtools)))){
+  install.packages("devtools", repos="http://cran.r-project.org")
+}
+
+print("CHECKING SYSTEM VARIABLES FOR RTOOLS LOCATION")
+if(!devtools::find_rtools()){
+  stop("ERROR, R TOOLS NOT FOUND IN SYSTEM VARIABLES")
+}
+print("RTOOLS WORKING PROPERLY")
+
+print("CHECKING SYSTEM VARIABLES FOR PANDOC LOCATION")
+if(!PandocInstalled()){
+    stop("ERROR; PANDOC NOT INSTALLED")
+}
+print("PANDOC WORKING PROPERLY")
