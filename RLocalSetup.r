@@ -88,9 +88,9 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   devtools::create(name)
   packrat::init(enter=FALSE)
-  packrat::on()
+  packrat::on(auto.snapshot=FALSE)
+  packrat::extlib("devtools")
 
-  install.packages("devtools")
   install.packages("stringr")
 
   file.remove(paste0(name,"/DESCRIPTION"))
@@ -117,14 +117,14 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
     install.packages(i)
   }
   if(length(dependsGithub)>0) for(i in dependsGithub){
-    packrat::install_github(i)
+    devtools::install_github(i)
   }
 
   if(length(importsCRAN)>0) for(i in importsCRAN){
     install.packages(i)
   }
   if(length(importsGithub)>0) for(i in importsGithub){
-    packrat::install_github(i)
+    devtools::install_github(i)
   }
 
   packrat::snapshot()
@@ -157,7 +157,8 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   file.copy(file, paste0("reports_skeleton/references.bib"), overwrite=TRUE)
 
   packrat::off()
-
+  erase.file(".Rprofile")
+  
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
   write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/\nreports_formatted/\npres_formatted/\npackrat/",file=".gitignore")
 
