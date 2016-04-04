@@ -125,7 +125,6 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   }
 
   packrat::snapshot()
-  packrat::restore()
 
   dir.create("data_raw")
   dir.create("data_temp")
