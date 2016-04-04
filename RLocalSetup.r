@@ -1,4 +1,4 @@
-# 4.1
+# 4.2
 #
 # Richard White
 # r.aubrey.white@gmail.com
@@ -89,10 +89,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   devtools::create(name)
   packrat::init(enter=FALSE)
   packrat::on(auto.snapshot=FALSE)
-  packrat::extlib("devtools")
-
-  install.packages("stringr")
-
+  
   file.remove(paste0(name,"/DESCRIPTION"))
 
   dependsGithub <- depends[grep("/",depends)]
