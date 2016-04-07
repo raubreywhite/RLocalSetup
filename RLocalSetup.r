@@ -187,6 +187,19 @@ packrat::on(auto.snapshot=FALSE)
 #packrat::status()
 #packrat::snapshot()
 
+###############################################
+####       RUN CODE TO THIS POINT          ####
+###############################################
+####       THEN WAIT AT THIS POINT         ####
+####   UNTIL EVERYTHING HAS FULLY LOADED   ####
+####         BEFORE PROGRESSING            ####
+###############################################
+###############################################
+####         TRY TYPING \"2\" TO SEE         ####
+####       IF RSTUDIO HAS FULLY LOADED     ####
+####           THE PREVIOUS CODE           ####
+###############################################
+
 # Unload package
 try(devtools::unload(\"",name,"\"),TRUE)
 
