@@ -139,17 +139,17 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   dir.create(paste0(name,"/inst"))
   dir.create(paste0(name,"/inst/extdata"))
+  
+  file <- system.file("extdata","pres.Rmd",package="RAWmisc")
+  file.copy(file, paste0("pres_skeleton/pres.Rmd"), overwrite=TRUE)
 
   file <- system.file("extdata","report.Rmd",package="RAWmisc")
-  file.copy(file, paste0(name,"/inst/extdata/report.Rmd"), overwrite=TRUE)
   file.copy(file, paste0("reports_skeleton/report.Rmd"), overwrite=TRUE)
-
+  
   file <- system.file("extdata","american-medical-association.csl",package="RAWmisc")
-  file.copy(file, paste0(name,"/inst/extdata/american-medical-association.csl"), overwrite=TRUE)
   file.copy(file, paste0("reports_skeleton/american-medical-association.csl"), overwrite=TRUE)
 
   file <- system.file("extdata","references.bib",package="RAWmisc")
-  file.copy(file, paste0(name,"/inst/extdata/references.bib"), overwrite=TRUE)
   file.copy(file, paste0("reports_skeleton/references.bib"), overwrite=TRUE)
 
   packrat::off()
@@ -187,6 +187,9 @@ packrat::on(auto.snapshot=FALSE)
 #packrat::status()
 #packrat::snapshot()
 
+# Unload package
+try(devtools::unload(\"",name,"\"),TRUE)
+
 # Load package
 devtools::load_all(\"",name,"\")
 library(data.table)
@@ -200,11 +203,22 @@ git2r::contributions(r,by=\"author\")
 
 # Your code starts here
 
-# Self contained HTML file
+data <- CleanData()
+FigureTest()
+
+# Self contained HTML report file
+# - Copying tables into word/docx will work (and be formatted correctly)
 # - Copying base64 images to word/docx won't work
-# - But you can email this to people and it will still work
+# - You can email this to people and it will still work
+# - Open in Chrome (not Internet Explorer)
 RAWmisc::RmdToHTMLDOCX(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFrom=\"reports_skeleton\")
 
+# Self contained HTML presentation file
+# - You can email this to people and it will still work
+# - Open in Chrome (not Internet Explorer)
+RAWmisc::RmdToPres(inFile=\"pres_skeleton/pres.Rmd\",
+                   outFile=\"pres_formatted/Presentation.html\",
+                   copyFrom=\"pres_skeleton\")
 
 "),file="Run.R")
 
