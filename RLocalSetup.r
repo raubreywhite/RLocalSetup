@@ -87,8 +87,11 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   imports <- imports[imports!=""]
 
   devtools::create(name)
+  
+  setwd(\"",name,"\")
   packrat::init(enter=FALSE)
   packrat::on(auto.snapshot=FALSE)
+  setwd(\".."\")
   
   file.remove(paste0(name,"/DESCRIPTION"))
 
@@ -156,23 +159,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   file.remove(".Rprofile")
   
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
-  write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_temp/\ndata_clean/\nreports_formatted/\npres_formatted/\npackrat/",file=".gitignore")
-
-  write("
-CleanData <- function(){
-  data <- data.frame(x=rnorm(100),y=rnorm(100))
-  return(data)
-}",file=paste0(name,"/R/CleanData.R"))
-
-  write("
-FigureTest <- function(data){
-  q <- ggplot(data, aes(x=x, y=y))
-  q <- q + geom_point()
-  q <- SMAOgraphs::SMAOFormatGGPlot(q)
-  SMAOgraphs::SMAOpng(\"results_final/test.png\")
-  print(q)
-  dev.off()
-}",file=paste0(name,"/R/Figures.R"))
+  write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_raw/\ndata_temp/\ndata_clean/\nreports_formatted/\npres_formatted/\npackrat/",file=".gitignore")
 
   write(
 paste0("
@@ -183,22 +170,11 @@ upgradeRLocalSetup <- FALSE
 source(\"RLocalSetup.R\")
 
 # Packrat
-packrat::on(auto.snapshot=FALSE)
+setwd(\"",name,"\")
+suppressWarnings(packrat::on(auto.snapshot=FALSE))
+setwd(\"..\")
 #packrat::status()
 #packrat::snapshot()
-
-###############################################
-####       RUN CODE TO THIS POINT          ####
-###############################################
-####       THEN WAIT AT THIS POINT         ####
-####   UNTIL EVERYTHING HAS FULLY LOADED   ####
-####         BEFORE PROGRESSING            ####
-###############################################
-###############################################
-####         TRY TYPING \"2\" TO SEE         ####
-####       IF RSTUDIO HAS FULLY LOADED     ####
-####           THE PREVIOUS CODE           ####
-###############################################
 
 # Unload package
 try(devtools::unload(\"",name,"\"),TRUE)
