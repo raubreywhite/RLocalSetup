@@ -88,10 +88,10 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   devtools::create(name)
   
-  setwd(\"",name,"\")
+  setwd(name)
   packrat::init(enter=FALSE)
   packrat::on(auto.snapshot=FALSE)
-  setwd(\".."\")
+  setwd("..")
   
   file.remove(paste0(name,"/DESCRIPTION"))
 
