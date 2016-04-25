@@ -66,6 +66,11 @@ PandocInstalled <- function(){
   return(FALSE)
 }
 
+Restore <- function(){
+  install.packages(c("BH","XML","git2r","RCurl"))
+  packrat::restore()
+}
+
 CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   if(!suppressWarnings(suppressMessages(require(devtools)))){
     install.packages("devtools", repos="http://cran.r-project.org")
