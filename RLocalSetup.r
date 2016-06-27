@@ -163,6 +163,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   packrat::off()
   file.remove(".Rprofile")
   
+  write("RPROJ <- list(PROJHOME = normalizePath(getwd()));attach(RPROJ);cat('sourcing Project-specific .Rprofile\\n');cat('retrieve the top-level Project directory at any time with PROJHOME or via get(\"PROJHOME\", \"RPROJ\"):\\n',get(\"PROJHOME\", \"RPROJ\"), \"\\n\");rm(RPROJ)",file=".Rprofile")
   write("Version: 1.0\n\nRestoreWorkspace: No\nSaveWorkspace: No\nAlwaysSaveHistory: No\n\nEnableCodeIndexing: Yes\nUseSpacesForTab: Yes\nNumSpacesForTab: 2\nEncoding: ISO8859-1\n\n\nRnwWeave: Sweave\nLaTeX: pdfLaTeX",file=paste0(name,".Rproj"))
   write(".Rproj.user\n.Rhistory\n.RData\nresults_temp/\nresults_final/\ndata_raw/\ndata_temp/\ndata_clean/\nreports_formatted/\npres_formatted/\npackrat/",file=".gitignore")
 
