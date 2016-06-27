@@ -169,7 +169,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   write(
 paste0("
-setwd(\"",getwd(),"\")
+setwd(\"get(\"PROJHOME\", \"RPROJ\")\")
 
 # Change if you want local setup to be pulled from github
 upgradeRLocalSetup <- FALSE
