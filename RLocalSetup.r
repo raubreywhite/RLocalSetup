@@ -201,16 +201,12 @@ git2r::contributions(r,by=\"author\")
 data <- CleanData()
 FigureTest()
 
-# Self contained HTML report file
-# - Copying tables into word/docx will work (and be formatted correctly)
-# - Copying base64 images to word/docx won't work
-# - You can email this to people and it will still work
-# - Open in Chrome (not Internet Explorer)
-RAWmisc::RmdToHTMLDOCX(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/HTMLReport_\",format(Sys.time(), \"%Y_%m_%d\"),\".html\"), copyFrom=\"reports_skeleton\")
+# Text
+RAWmisc::RmdToDOCX(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/\",format(Sys.time(), \"%Y_%m_%d\"),\"_text.html\"), copyFrom=\"reports_skeleton\")
 
-# Self contained HTML presentation file
-# - You can email this to people and it will still work
-# - Open in Chrome (not Internet Explorer)
+# Tables
+RAWmisc::RmdToHTMLDOCX(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/\",format(Sys.time(), \"%Y_%m_%d\"),\"_tables.html\"), copyFrom=\"reports_skeleton\")
+
 RAWmisc::RmdToPres(inFile=\"pres_skeleton/pres.Rmd\",
                    outFile=\"pres_formatted/Presentation.html\",
                    copyFrom=\"pres_skeleton\")
