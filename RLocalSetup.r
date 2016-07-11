@@ -184,6 +184,40 @@ setwd(\"..\")
 #packrat::status()
 #packrat::snapshot()
 
+# new
+isLinux <- length(grep(\"linux\",sessionInfo()$platform))>0
+isRStudio <- Sys.getenv(\"RSTUDIO\") == "1"
+msg <- function(p,m){
+  if(length(grep(\"linux\",sessionInfo()$platform))>0) system(paste0('/log/log.sh \"',lubridate::now(tzone="CET"),'@',p,'@',m,\'"'))
+}
+# Change if you want local setup to be pulled from github
+upgradeRLocalSetup <- FALSE
+
+if(isLinux){
+  msg(\"",name,"\",\"Beginning program\")
+  if(!exists(\"RPROJ\")) RPROJ <- list(PROJHOME = normalizePath(\"/src/\"))
+
+  setwd(RPROJ$PROJHOME)
+  source(\"RLocalSetup.R\")
+  
+} else {
+  Sys.setenv(R_TOOLS=\"C:\\\\Apps\\\\Rtools\")
+  Sys.setenv(R_TOOLS_PATH=\"C:\\\\Apps\\\\Rtools\\\\bin;C:\\\\Apps\\\\Rtools\\\\gcc-4.6.3\\\\bin\")
+  Sys.setenv(PATH=paste0(c(Sys.getenv(\"R_TOOLS_PATH\"),Sys.getenv(\"PATH\"),Sys.getenv(\"R_PATH\")),collapse=\";\"))
+  Sys.setenv(RSTUDIO_PANDOC=\"C:/Apps/RStudio/bin/pandoc\")
+
+  setwd(RPROJ$PROJHOME)
+  source(\"RLocalSetup.R\")
+  
+  # Packrat
+  setwd(\"",name,"\")
+  suppressWarnings(packrat::on(auto.snapshot=FALSE))
+  setwd(\"..\")
+  #packrat::status()
+  #packrat::snapshot()
+}
+# new end
+
 # Unload package
 try(devtools::unload(\"",name,"\"),TRUE)
 
@@ -199,9 +233,16 @@ git2r::summary(r)
 git2r::contributions(r,by=\"author\")
 
 # Your code starts here
-
-data <- CleanData()
-FigureTest()
+tryCatch({
+  print(\"Hello\")
+}, warning=function(war) {
+  msg(\"",name,"\",paste0(\"Finished with warning: \",war))
+}, error=function(err) {
+  msg(\"",name,"\",paste0(\"Finished with error: \",err))
+}, finally={
+  msg(\"",name,"\",\"Main part finished\")
+}
+)
 
 # Text
 RAWmisc::RmdToDOCX(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatted/\",format(Sys.time(), \"%Y_%m_%d\"),\"_text.html\"), copyFrom=\"reports_skeleton\")
@@ -212,6 +253,8 @@ RAWmisc::RmdToHTMLDOCX(\"reports_skeleton/report.Rmd\",paste0(\"reports_formatte
 RAWmisc::RmdToPres(inFile=\"pres_skeleton/pres.Rmd\",
                    outFile=\"pres_formatted/Presentation.html\",
                    copyFrom=\"pres_skeleton\")
+
+msg(\"",name,"\","Program finished")
 
 "),file="Run.R")
 
