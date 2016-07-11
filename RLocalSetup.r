@@ -238,9 +238,9 @@ tryCatch({
   
   msg(\"",name,"\",\"Main code finished\")
 }, warning=function(war) {
-  msg(\"",name,"\",paste0(\"Finished with warning: \",war))
+  msg(\"",name,"\",paste0(\"UNEXPECTEDLY finished with warning: \",war))
 }, error=function(err) {
-  msg(\"",name,"\",paste0(\"Finished with error: \",err))
+  msg(\"",name,"\",paste0(\"UNEXPECTEDLY finished with error: \",err))
 }, finally={
 }
 )
