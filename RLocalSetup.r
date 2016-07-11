@@ -99,6 +99,8 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   setwd("..")
   
   file.remove(paste0(name,"/DESCRIPTION"))
+  
+  install.packages(c("stringr","devtools"))
 
   dependsGithub <- depends[grep("/",depends)]
   dependsCRAN <- depends[!depends %in% dependsGithub]
