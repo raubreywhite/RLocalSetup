@@ -235,12 +235,13 @@ git2r::contributions(r,by=\"author\")
 # Your code starts here
 tryCatch({
   print(\"Hello\")
+  
+  msg(\"",name,"\",\"Main code finished\")
 }, warning=function(war) {
   msg(\"",name,"\",paste0(\"Finished with warning: \",war))
 }, error=function(err) {
   msg(\"",name,"\",paste0(\"Finished with error: \",err))
 }, finally={
-  msg(\"",name,"\",\"Main part finished\")
 }
 )
 
@@ -254,7 +255,7 @@ RAWmisc::RmdToPres(inFile=\"pres_skeleton/pres.Rmd\",
                    outFile=\"pres_formatted/Presentation.html\",
                    copyFrom=\"pres_skeleton\")
 
-msg(\"",name,"\","Program finished")
+msg(\"",name,"\","Exiting R")
 
 "),file="Run.R")
 
