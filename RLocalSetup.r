@@ -142,7 +142,7 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
   dir.create("data_temp")
   dir.create("data_clean")
 
-  dir.create("results_temp")
+  dir.create("results_baked")
   dir.create("results_final")
   dir.create("reports_skeleton")
   dir.create("reports_formatted")
