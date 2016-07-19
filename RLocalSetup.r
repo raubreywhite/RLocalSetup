@@ -227,6 +227,12 @@ if(isLinux){
 # new end
 
 library(data.table)
+library(ggplot2)
+library(foreach)
+library(doParallel)
+registerDoParallel()
+
+assign("RUN_ALL", TRUE, envir=globalenv())
 
 fileSources = file.path(\"code\",list.files(\"code\",pattern=\"*.R$\"))
 sapply(fileSources,source,.GlobalEnv)
@@ -241,6 +247,17 @@ git2r::contributions(r,by=\"author\")
 # Your code starts here
 tryCatch({
   print(\"Hello\")
+  
+  if(RUN_ALL) file.remove("results_baked/test.RDS")
+  bake(file="results_baked/test.RDS",seed=4,kind="L'Ecuyer",{
+    foreach (i=1:10,
+           .combine=c,
+           .inorder=FALSE,
+           .options.multicore=list(set.seed=TRUE)
+    ) %dopar% {
+      i
+    } 
+  }) -> p
   
   msg(\"",name,"\",\"Main code finished\")
 }, warning=function(war) {
