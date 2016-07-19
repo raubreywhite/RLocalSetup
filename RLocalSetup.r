@@ -136,6 +136,8 @@ CreatePackage <- function(name="test",depends=NULL,imports=NULL){
 
   packrat::snapshot()
 
+  dir.create("code")
+
   dir.create("data_raw")
   dir.create("data_temp")
   dir.create("data_clean")
@@ -215,15 +217,19 @@ if(isLinux){
   setwd(\"..\")
   #packrat::status()
   #packrat::snapshot()
+  
+  # Unload package
+  try(devtools::unload(\"",name,"\"),TRUE)
+
+  # Load package
+  devtools::load_all(\"",name,"\")
 }
 # new end
 
-# Unload package
-try(devtools::unload(\"",name,"\"),TRUE)
-
-# Load package
-devtools::load_all(\"",name,"\")
 library(data.table)
+
+fileSources = file.path(\"code\",list.files(\"code\",pattern=\"*.R$\"))
+sapply(fileSources,source,.GlobalEnv)
 
 # Commit to Git
 CommitToGit(paste0(\"Committing while loading at \",Sys.time()))
