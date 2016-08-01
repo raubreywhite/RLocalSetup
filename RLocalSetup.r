@@ -188,15 +188,15 @@ setwd(\"..\")
 
 # new
 isLinux <- length(grep(\"linux\",sessionInfo()$platform))>0
-isRStudio <- Sys.getenv(\"RSTUDIO\") == "1"
+isRStudio <- Sys.getenv(\"RSTUDIO\") == \"1\"
 msg <- function(p,m){
-  if(length(grep(\"linux\",sessionInfo()$platform))>0) system(paste0('/log/log.sh \"',lubridate::now(tzone="CET"),'@',p,'@',m,\'"'))
+  if(length(grep(\"linux\",sessionInfo()$platform))>0) system(paste0('/log/log.sh \"',lubridate::now(tzone=\"CET\"),'@',p,'@',m,'\"'))
 }
 # Change if you want local setup to be pulled from github
 upgradeRLocalSetup <- FALSE
 
 if(isLinux){
-  msg(\"",name,"\",\"Beginning program\")
+  msg(\"",name,"\",\"RUN\",\"Beginning program\")
   if(!exists(\"RPROJ\")) RPROJ <- list(PROJHOME = normalizePath(\"/src/\"))
 
   setwd(RPROJ$PROJHOME)
@@ -232,9 +232,9 @@ library(foreach)
 library(doParallel)
 registerDoParallel()
 
-assign("RUN_ALL", TRUE, envir=globalenv())
+assign(\"RUN_ALL\", TRUE, envir=globalenv())
 
-fileSources = file.path(\"code\",list.files(\"code\",pattern=\"*.R$\"))
+fileSources = file.path(\"code\",list.files(\"code\",pattern=\"*.[rR]$\"))
 sapply(fileSources,source,.GlobalEnv)
 
 # Commit to Git
@@ -248,8 +248,8 @@ git2r::contributions(r,by=\"author\")
 tryCatch({
   print(\"Hello\")
   
-  if(RUN_ALL) file.remove("results_baked/test.RDS")
-  bake(file="results_baked/test.RDS",seed=4,kind="L'Ecuyer",{
+  if(RUN_ALL) file.remove(\"results_baked/test.RDS\")
+  bake(file=\"results_baked/test.RDS\",seed=4,kind=\"L'Ecuyer\",{
     foreach (i=1:10,
            .combine=c,
            .inorder=FALSE,
@@ -259,11 +259,11 @@ tryCatch({
     } 
   }) -> p
   
-  msg(\"",name,"\",\"Main code finished\")
+  msg(\"",name,"\",\"RUN\",\"Main code finished\")
 }, warning=function(war) {
-  msg(\"",name,"\",paste0(\"UNEXPECTEDLY finished with warning: \",war))
+  msg(\"",name,"\",\"WARN\",paste0(\"UNEXPECTEDLY finished with warning: \",war))
 }, error=function(err) {
-  msg(\"",name,"\",paste0(\"UNEXPECTEDLY finished with error: \",err))
+  msg(\"",name,"\",\"ERROR\",paste0(\"UNEXPECTEDLY finished with error: \",err))
 }, finally={
 }
 )
@@ -278,7 +278,7 @@ RAWmisc::RmdToPres(inFile=\"pres_skeleton/pres.Rmd\",
                    outFile=\"pres_formatted/Presentation.html\",
                    copyFrom=\"pres_skeleton\")
 
-msg(\"",name,"\","Exiting R")
+msg(\"",name,"\",\"FINISHED\",\"Exiting R\")
 
 "),file="Run.R")
 
