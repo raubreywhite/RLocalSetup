@@ -8,7 +8,7 @@
 
 rm(list=ls())
 
-setwd("~/")
+setwd("/src")
 source("RLocalSetup.R")
 
 CreatePackage("test")
